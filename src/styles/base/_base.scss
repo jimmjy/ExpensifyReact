@@ -22,3 +22,8 @@ button:disabled {
 button:focus {
     outline: 0;
 }
+
+.is-active {
+    color: red;
+    font-weight: bold;
+}
