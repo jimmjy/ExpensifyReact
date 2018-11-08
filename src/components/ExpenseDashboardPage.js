@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ExpenseDashboardPage = () => (
+const ExpenseDashboardPage = (props) => (
     <div>
         This is from dashboard component
     </div>
