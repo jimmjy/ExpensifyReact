@@ -1,45 +1,58 @@
 import { createStore } from 'redux';
 
-// payload = { incrementBy: 10 } = const { incrementBy }
-// const test = {
-//     incrementBy: 10
-// };
-
-// const { incrementBy: increment } = test;
-// console.log(increment)
-
-const incrementBy = ({ incrementBy } = {}) => ({
+//increment action generator
+const incrementCount = ({ incrementBy = 1} = {} ) => ({ 
     type: 'INCREMENT',
-    incrementBy: typeof incrementBy === 'number' ? incrementBy : 1
+    incrementBy
 });
 
-const store = createStore((state = { count: 0 }, action) => {
-    switch(action.type) {
+const decrementCount = ({ decrementBy = 1 } = {}) => ({
+    type: 'DECREMENT',
+    decrementBy
+});
+
+const setCount = ({ newCount }) => ({
+    type: 'SET',
+    newCount
+});
+
+const resetCount = () => ({ type: 'RESET' });
+
+const store = createStore((state = { count: 0 }, action ) => {
+    //swtich - what to do with state based off actions
+    switch (action.type) {
         case 'INCREMENT':
             return {
                 count: state.count + action.incrementBy
             };
         case 'DECREMENT':
             return {
-                count: state.count - 1
+                count: state.count - action.decrementBy
             };
+        case 'SET':
+            return { count: action.newCount };
         case 'RESET':
             return { count: 0 };
-
         default:
+            console.log(action);
             return state;
     }
 });
 
-console.log(store.getState());
-
-store.dispatch(incrementBy({ incrementBy: 10 }));
-
-console.log(store.getState())
-
-store.dispatch({
-    type: 'RESET'
+const unsubscribe = store.subscribe(() => {
+    console.log(store.getState());
 });
 
+//increment count
+store.dispatch(incrementCount({ incrementBy: 5 }));
+store.dispatch(incrementCount());
 
-console.log(store.getState())
+//decrement count
+store.dispatch(decrementCount());
+store.dispatch(decrementCount({ decrementBy: 2 }));
+//set count
+store.dispatch(setCount({ newCount: 12 }));
+
+//reset count
+store.dispatch(resetCount());
+
