@@ -8,14 +8,26 @@ const test = ( a = 1 ) => {
 
 test(20);
 
-const incrementBy = ( { incrementBy = 1 } = {}) => ({ 
+// increment count action generator
+const incrementCount = ( { incrementBy = 1 } = {} ) => ({ 
     type: 'INCREMENT',
     incrementBy
 });
 
-const decrementBy = ({ decrementBy = 1 } = {}) => ({
+// decrement count action generator
+const decrementCount = ({ decrementBy = 1 } = {}) => ({
     type: 'DECREMENT',
     decrementBy
+});
+
+// Reset count action generator
+const resetCount = () => ({ type: 'RESET' });
+
+// Set the count action generator
+
+const setCount = ( { count } ) => ({
+    type: 'SET',
+    count
 });
 
 
@@ -38,9 +50,8 @@ const store = createStore((state = { count: 0 }, action) => {
             };
 
         case 'SET':
-            const set = action.count ? action.count : state.count;
             return {
-                count: set
+                count: action.count
             };
 
         default:
@@ -49,27 +60,22 @@ const store = createStore((state = { count: 0 }, action) => {
 });
 
 
-store.subscribe(() => {
+const unsubscribe = store.subscribe(() => {
     console.log(store.getState());
 });
 
-store.dispatch(incrementBy({ incrementBy: 10 }));
+store.dispatch(incrementCount({ incrementBy: 5 }));
 
 //USING OUR GENERATOR
-store.dispatch(incrementBy());
+store.dispatch(incrementCount());
 
-store.dispatch({
-    type: 'RESET'
-});
+store.dispatch(resetCount());
 
-store.dispatch(decrementBy({ decrementBy: 10 }));
+store.dispatch(decrementCount({ decrementBy: 10 }));
 
-store.dispatch(decrementBy());
+store.dispatch(decrementCount());
 
-store.dispatch({
-    type: 'SET',
-    count: 101
-});
+store.dispatch(setCount({ count: 101 }));
 
 
 
