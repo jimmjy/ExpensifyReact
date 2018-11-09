@@ -1,18 +1,21 @@
 import { createStore } from 'redux';
 
 // action generator - used to create our actions objects
+// quick test with default parameters
+const test = ( a = 1 ) => {
+    console.log(a + 10);
+}
 
-const add = ({ a, b }) => {
-    return a + b;
-};
+test(20);
 
-//above is like saying data = {a:1, b: 2} = {a, b}
-
-console.log(add({ a: 1, b: 2 }));
-
-const incrementBy = (payload = {}) => ({ 
+const incrementBy = ( { incrementBy = 1 } = {}) => ({ 
     type: 'INCREMENT',
-    incrementBy: typeof payload.incrementBy === 'number' ? payload.incrementBy : 1
+    incrementBy
+});
+
+const decrementBy = ({ decrementBy = 1 } = {}) => ({
+    type: 'DECREMENT',
+    decrementBy
 });
 
 
@@ -25,10 +28,8 @@ const store = createStore((state = { count: 0 }, action) => {
             };
 
         case 'DECREMENT':
-            const decrementBy = typeof action.decrementBy === 'number' ? action.decrementBy : 1;
-
             return {
-                count: state.count - decrementBy
+                count: state.count - action.decrementBy
             };
 
         case 'RESET':
@@ -48,27 +49,22 @@ const store = createStore((state = { count: 0 }, action) => {
 });
 
 
-const unsubscribe = store.subscribe(() => {
+store.subscribe(() => {
     console.log(store.getState());
 });
 
-store.dispatch(incrementBy({ incrementBy: -2 }));
+store.dispatch(incrementBy({ incrementBy: 10 }));
 
 //USING OUR GENERATOR
-store.dispatch(incrementBy({ incrementBy: 5 } ));
+store.dispatch(incrementBy());
 
 store.dispatch({
     type: 'RESET'
 });
 
-store.dispatch({
-    type: 'DECREMENT',
-    decrementBy: 10
-});
+store.dispatch(decrementBy({ decrementBy: 10 }));
 
-store.dispatch({
-    type: 'DECREMENT'
-});
+store.dispatch(decrementBy());
 
 store.dispatch({
     type: 'SET',
