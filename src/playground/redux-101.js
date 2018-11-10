@@ -14,6 +14,17 @@ const incrementCount = ( { incrementBy = 1 } = {} ) => ({
     incrementBy
 });
 
+//alternate method but more code, arguable easier to understand
+const incrementCountTwo = (payload = {}) => {
+
+    const incrementBy = typeof payload.incrementBy === 'number' ? payload.incrementBy : 1;
+
+    return {
+        type: 'INCREMENT',
+        incrementBy
+    }
+};
+
 // decrement count action generator
 const decrementCount = ({ decrementBy = 1 } = {}) => ({
     type: 'DECREMENT',
@@ -30,8 +41,12 @@ const setCount = ( { count } ) => ({
     count
 });
 
+// reducer
+// 1. Reducers are pure functions
+// basically means the output is determined by the input because it doesn't change anyhting outside the scope of the function but only also uses what is passed to it.
+// 2. Never change state or action
 
-const store = createStore((state = { count: 0 }, action) => {
+const countReducer = (state = { count: 0 }, action) => {
 
     switch (action.type) {
         case 'INCREMENT':
@@ -55,9 +70,11 @@ const store = createStore((state = { count: 0 }, action) => {
             };
 
         default:
-        return state;
+            return state;
     }
-});
+};
+
+const store = createStore(countReducer);
 
 
 const unsubscribe = store.subscribe(() => {
@@ -65,6 +82,10 @@ const unsubscribe = store.subscribe(() => {
 });
 
 store.dispatch(incrementCount({ incrementBy: 5 }));
+
+//test with second method
+store.dispatch(incrementCountTwo({ incrementBy: 22 }));
+store.dispatch(incrementCountTwo());
 
 //USING OUR GENERATOR
 store.dispatch(incrementCount());

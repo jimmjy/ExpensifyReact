@@ -88,5 +88,5 @@ store.dispatch({
 });
 
 
-
+// The function that we send into the createStore function is called a reducer.
 
